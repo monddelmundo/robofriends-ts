@@ -1,15 +1,21 @@
 import { Component } from "react";
 import React from "react";
 
-class ErrorBoundry extends Component {
-  constructor() {
-    super();
+interface IAppProps {}
+
+interface IState {
+  hasError: boolean;
+}
+
+class ErrorBoundry extends Component<IAppProps, IState> {
+  constructor(props: IAppProps) {
+    super(props);
     this.state = {
       hasError: false,
     };
   }
 
-  componentDidCatch(error, info) {
+  componentDidCatch() {
     this.setState({ hasError: true });
   }
 

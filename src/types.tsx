@@ -14,4 +14,11 @@ export interface IRobotState {
   error: string;
 }
 
+export type AppState = {
+  requestRobots: IRobotState;
+  searchRobots: IRobotState;
+};
+
+export interface IExtraDispatchArguments {}
+
 export type RobotsAction = ActionType<typeof actions>;

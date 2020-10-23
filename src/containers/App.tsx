@@ -3,15 +3,10 @@ import "../containers/App.css";
 import { setSearchField, requestRobots } from "../actions";
 import { connect } from "react-redux";
 import MainPage from "../components/MainPage";
-import { IRobot, IRobotState } from "../types";
-
-export interface IAppProps {
-  searchField: string;
-  onSearchChange: () => void;
-  robots: Array<IRobot>;
-  onRequestRobots: () => void;
-  isPending: boolean;
-}
+import { ThunkDispatch } from "redux-thunk";
+import { AppState } from "../types";
+import { AnyAction } from "redux";
+import { IRootState } from "../index";
 
 // interface IState {
 //   searchField: string;
@@ -20,25 +15,39 @@ export interface IAppProps {
 //   error: string;
 // }
 
-const App = (props: IAppProps) => {
+type IPropsFromDispatch = {
+  onSearchChange: (
+    event: React.SyntheticEvent<HTMLInputElement>
+  ) => Promise<void>;
+  onRequestRobots: () => Promise<void>;
+};
+
+//interface IAppProps extends ReduxType, IPropsFromDispatch {}
+
+export type AppProps = StateProps & IPropsFromDispatch;
+
+const App: React.FC<AppProps> = (props) => {
   return <MainPage {...props} />;
 };
 
-function mapStateToProps(state: IRobotState) {
+function mapStateToProps(state: AppState) {
   return {
-    searchField: state.searchField,
-    robots: state.robots,
-    isPending: state.isPending,
-    error: state.error,
+    searchField: state.searchRobots.searchField,
+    robots: state.requestRobots.robots,
+    isPending: state.requestRobots.isPending,
+    error: state.requestRobots.error,
   };
 }
 
-// function mapDispatchToProps(dispatch: Dispatch<RobotAction>) {
-//   return {
-//     onSearchChange: (event: React.SyntheticEvent<HTMLInputElement>) =>
-//       dispatch(setSearchField(event.currentTarget.value)),
-//     onRequestRobots: () => dispatch(requestRobots()),
-//   };
-// }
+function mapDispatchToProps(
+  dispatch: ThunkDispatch<IRootState, any, AnyAction>
+): IPropsFromDispatch {
+  return {
+    onSearchChange: (event: React.SyntheticEvent<HTMLInputElement>) =>
+      dispatch<any>(setSearchField(event.currentTarget.value)),
+    onRequestRobots: () => dispatch<any>(requestRobots()),
+  };
+}
+type StateProps = ReturnType<typeof mapStateToProps>;
 
-export default connect(mapStateToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);

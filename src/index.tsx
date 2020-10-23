@@ -12,7 +12,7 @@ import { searchRobots, requestRobots } from "./reducers";
 import { IRobotState } from "./types";
 
 export interface IRootState {
-  robot: IRobotState;
+  state: IRobotState;
 }
 
 const logger = createLogger();
@@ -23,11 +23,12 @@ const logger = createLogger();
 //   applyMiddleware(thunkMiddleware, logger)
 // );
 
-const store = createStore<IRootState, any, any, any>(
+const store = createStore(
   combineReducers({
     searchRobots,
     requestRobots,
-  })
+  }),
+  applyMiddleware(thunkMiddleware, logger)
 );
 
 ReactDOM.render(

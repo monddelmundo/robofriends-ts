@@ -5,18 +5,19 @@ import Scroll from "../components/Scroll";
 import ErrorBoundry from "../components/ErrorBoundry";
 import "./MainPage.css";
 import Header from "../components/Header";
-import { IRobot } from "../containers/App";
+import { IRobot } from "../types";
+import { AppProps } from "../containers/App";
 
-export interface IAppProps {
-  searchField: string;
-  onSearchChange: () => void;
-  robots: Array<IRobot>;
-  onRequestRobots: () => void;
-  isPending: boolean;
-}
+// export type IAppProps = {
+//   searchField: string;
+//   onSearchChange: (event: React.SyntheticEvent<HTMLInputElement>) => void;
+//   robots: Array<IRobot>;
+//   onRequestRobots: () => void;
+//   isPending: boolean;
+// };
 
-function MainPage(props: IAppProps) {
-  const [filteredRobots, setFilteredRobots] = useState<IRobot[]>([]);
+function MainPage(props: AppProps) {
+  const [filteredRobots, setFilteredRobots] = useState<Array<IRobot>>([]);
   const {
     searchField,
     onSearchChange,
@@ -24,6 +25,8 @@ function MainPage(props: IAppProps) {
     onRequestRobots,
     isPending,
   } = props;
+
+  console.log(props);
 
   //componentDidMount
   useEffect(() => {
